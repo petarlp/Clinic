@@ -1,9 +1,13 @@
 ﻿
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Clinic.API.Models.DTOs;
 using Clinic.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Clinic.API.Controllers;
 
@@ -16,6 +20,20 @@ public class AuthController : ControllerBase
     public AuthController(IAuthService authService)
     {
         _authService = authService;
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new
+        {
+            Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+            Email = User.FindFirst(ClaimTypes.Email)?.Value?? User.FindFirst(JwtRegisteredClaimNames.Email)?.Value,
+            UserName = User.Identity?.Name,
+            Roles = User.FindAll(ClaimTypes.Role)
+                        .Select(r => r.Value)
+        });
     }
 
     [HttpPost("register")]
@@ -47,3 +65,5 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
 }
+
+
