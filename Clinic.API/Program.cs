@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Clinic.API.Services.Interfaces;
+using Clinic.API.Services.Implementations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +74,10 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 var app = builder.Build();
 
