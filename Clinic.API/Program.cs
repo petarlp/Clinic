@@ -106,6 +106,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<IPatientService, PatientService>();
+
 
 var app = builder.Build();
 
