@@ -1,30 +1,31 @@
+
+const API_URL = 'http://localhost:5001/api';
+
 const buildOptions = (data) => {
-    const options = {};
+    const options = {
+        headers: {}
+    };
 
-    if (data) {
+    if (data !== undefined && data !== null) {
         options.body = JSON.stringify(data);
-        options.headers = {
-            'content-type': 'application/json'
-        };
+        options.headers['Content-Type'] = 'application/json';
     }
-
 
     const token = localStorage.getItem('accessToken');
 
-
-    if (token) { 
-        options.headers = {
-            ...options.headers,
-            'X-Authorization': token
-        };
+    if (token) {
+        options.headers.Authorization = `Bearer ${token}`;
     }
 
     return options;
 };
 
 const request = async (method, url, data) => {
+    const fullUrl = `${API_URL}${url}`;
 
-    const response = await fetch(url, {
+    console.log('API REQUEST:', fullUrl);
+
+    const response = await fetch(fullUrl, {
         ...buildOptions(data),
         method,
     });
@@ -33,11 +34,15 @@ const request = async (method, url, data) => {
         return {};
     }
 
-    const result = await response.json();
+    const contentType = response.headers.get('content-type');
+
+    const result = contentType?.includes('application/json')
+        ? await response.json()
+        : await response.text();
 
     if (!response.ok) {
         throw result;
-    } 
+    }
 
     return result;
 };
@@ -47,5 +52,3 @@ export const post = request.bind(null, 'POST');
 export const put = request.bind(null, 'PUT');
 export const remove = request.bind(null, 'DELETE');
 export const patch = request.bind(null, 'PATCH');
-
-

@@ -13,28 +13,45 @@ export function AuthProvider({
     const navigate = useNavigate();
     const [auth, setAuth] = usePersistedState('auth', {});
 
-    const loginSubmitHandler = async (values) => {
-
-
+    
+const loginSubmitHandler = async (values) => {
+    try {
         const result = await authService.login(values.email, values.password);
 
-        setAuth(result);
+        console.log('LOGIN RESULT:', result);
 
-        localStorage.setItem('accessToken', result.accessToken);
-        localStorage.setItem('username', result.username);
-        localStorage.setItem('user_img', result.img);
-        localStorage.setItem('user_type', result.type);
-        localStorage.setItem('user_id', result._id);
+        setAuth({
+            ...result,
+            accessToken: result.token,
+        });
+
+        localStorage.setItem('accessToken', result.token);
+        localStorage.setItem(
+            'username',
+            `${result.firstName || ''} ${result.lastName || ''}`.trim()
+        );
+        localStorage.setItem('user_type', result.roles?.[0] || 'User');
+        localStorage.setItem('user_email', result.email);
 
         navigate(Path.Home);
-    };
+
+    } catch (error) {
+        console.error('LOGIN ERROR:', error);
+    }
+};
+
 
     const registerSubmitHandler = async (values) => {
         const result = await authService.register(values.email, values.password);
 
-        setAuth(result);
 
-        localStorage.setItem('accessToken', result.accessToken);
+        setAuth({
+        ...result,
+        accessToken: result.token,
+        });
+
+
+        localStorage.setItem('accessToken', result.token);
         localStorage.setItem('username', result.username);
         localStorage.setItem('user_img', result.img);
         localStorage.setItem('user_type', result.type);
@@ -56,11 +73,13 @@ export function AuthProvider({
         loginSubmitHandler,
         registerSubmitHandler,
         logoutHandler,
-        username: auth.username || auth.email,
+        username: auth.username || `${auth.firstName || ''} ${auth.lastName || ''}`.trim() || auth.email,
+        userId: auth.userId,
         email: auth.email,
-        userId: auth._id,
         isAuthenticated: !!auth.accessToken,
     };
+
+
 
     return (
         <AuthContext.Provider value={values}>
@@ -72,3 +91,5 @@ export function AuthProvider({
 AuthContext.displayName = 'AuthContext';
 
 export default AuthContext;
+
+

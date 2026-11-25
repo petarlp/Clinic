@@ -1,6 +1,6 @@
 import * as request from "../lib/request";
 
-const baseUrl = 'http://localhost:3030/data/medicaments'
+const baseUrl = 'http://localhost:5001/data/medicaments'
 
 export const getAll = async () => {
 

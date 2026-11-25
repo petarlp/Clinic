@@ -1,6 +1,6 @@
 import * as request from "../lib/request";
 
-const baseUrl = 'http://localhost:3030/data/shedules'
+const baseUrl = 'http://localhost:5001/data/shedules'
 
 export const getAll = async () => {
 
