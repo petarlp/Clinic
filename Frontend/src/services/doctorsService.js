@@ -1,37 +1,14 @@
-import * as request from "../lib/request";
 
-const baseUrl = 'http://localhost:5001/data/doctors'
+import * as request from '../lib/request';
 
-export const getAll = async () => {
-    const result = await request.get(baseUrl);
+const baseUrl = '/Doctors';
 
-    const data = Object.values(result);
+export const getAll = () => request.get(baseUrl);
 
-    return data;
-};
+export const getById = (id) => request.get(`${baseUrl}/${id}`);
 
-export const del = async (id) => {
-    const result = await request.remove(`${baseUrl}/${id}`);
+export const create = (data) => request.post(baseUrl, data);
 
-    const data = Object.values(result);
+export const update = (id, data) => request.put(`${baseUrl}/${id}`, data);
 
-    return data;
-};
-
-export const update = async (id,formData) => {
-    const result = await request.put(`${baseUrl}/${id}`,formData);
-
-    const data = Object.values(result);
-
-    return data;
-};
-
-export const create = async (formData) => {
-    const result = await request.post(baseUrl,formData);
-
-    const data = Object.values(result);
-
-    return data;
-};
-
-
+export const del = (id) => request.remove(`${baseUrl}/${id}`);

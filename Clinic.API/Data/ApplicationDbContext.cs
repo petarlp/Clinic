@@ -15,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Patient> Patients { get; set; }
 
+    public DbSet<Doctor> Doctors { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -24,5 +26,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(u => u.Patients)
             .HasForeignKey(p => p.OwnerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Doctor>()
+            .HasOne(d => d.Owner)
+            .WithMany()
+            .HasForeignKey(d => d.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

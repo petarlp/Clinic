@@ -4,6 +4,9 @@ using System.Text;
 using Clinic.API.Data;
 using Clinic.API.Data.Seed;
 using Clinic.API.Models.Entities;
+using Clinic.API.Services;
+using Clinic.API.Services.Implementations;
+using Clinic.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -12,8 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Clinic.API.Services.Interfaces;
-using Clinic.API.Services.Implementations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -107,6 +108,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IPatientService, PatientService>();
+
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 
 var app = builder.Build();

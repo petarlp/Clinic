@@ -14,7 +14,7 @@ export default function Doctors() {
     const[editId, setEditId] = useState(null);
 
     const [formData, setFormData] = useState({
-        _id: '',
+        id: '',
         name: '',
         uin: '',
         codSpec: '',
@@ -34,7 +34,7 @@ export default function Doctors() {
 
     const addDoc = () => {
         console.log('add doc');
-        setFormData({ _id: '', name: '' , uin: '', codSpec: '', address: ''});
+        setFormData({ id: '', name: '' , uin: '', codSpec: '', address: ''});
         setEditIndex(null);
         setEditId(null);
         setShowModal(true);
@@ -44,7 +44,7 @@ export default function Doctors() {
 
         const selectedData = doctors[index];
         setFormData({
-            _id: id,
+            id: id,
             name: selectedData.name,
             uin: selectedData.uin,
             codSpec: selectedData.codSpec,
@@ -84,7 +84,7 @@ export default function Doctors() {
                 })
           
         }
-        setFormData({ _id: '', name: '' , uin: '', codSpec: '', address: ''});
+        setFormData({ id: '', name: '' , uin: '', codSpec: '', address: ''});
         setEditIndex(null);
         setEditId(null);
         setShowModal(false);
@@ -147,15 +147,15 @@ export default function Doctors() {
                                 </thead>
                                 <tbody>
                                     {doctors.map( (doctor, index) => (
-                                        <tr key={doctor._id}>
+                                        <tr key={doctor.id}>
                                             <td>{index + 1}</td>
                                             <td>{doctor.name}</td>
                                             <td>{doctor.uin}</td>
                                             <td>{doctor.codSpec}</td>
                                             <td>{doctor.address}</td>
                                             <td>
-                                                <i className="bi bi-pencil-square edit_but" onClick={ () => {editRecord(doctor._id,index)}} ></i>
-                                                <i className="bi bi-x-square del_but" onClick={() => {handleDelete(doctor._id,index)}}></i>
+                                                <i className="bi bi-pencil-square edit_but" onClick={ () => {editRecord(doctor.id,index)}} ></i>
+                                                <i className="bi bi-x-square del_but" onClick={() => {handleDelete(doctor.id,index)}}></i>
                                             </td>
                                         </tr>
                                     ))}
